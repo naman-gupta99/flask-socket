@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page 2</title>
+</head>
+
+<body>
+    <p id="number">0</p>
+    <script>
+        const socket = new WebSocket('ws://localhost:5000'); // Adjust the URL as needed
+
+        socket.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log('Received data:', data);
+            document.getElementById('number').textContent = data.number;
+        };
+    </script>
+</body>
+
+</html>
