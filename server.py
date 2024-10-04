@@ -1,7 +1,8 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO
+from flask_sock import Sock
+import json
 
-def Counter():
+class Counter():
     def __init__(self):
         self.__count = 0
     
@@ -12,8 +13,9 @@ def Counter():
         return self.__count
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+sock = Sock(app)
 counter = Counter()
+clients = set()
 
 @app.route("/")
 def page1():
@@ -22,17 +24,24 @@ def page1():
 
 @app.route("/page2")
 def page2():
-    return render_template("./page2.html")
+    return render_template("./page2.html", counter_value=counter.getCount())
 
-@socketio.on("increment")
-def handle_increment():
-    print("Incrementing counter")
-    counter.increment()
+@sock.route("/increment")
+def handle_increment(ws):
+    global clients
+    clients.add(ws)
+    while True:
+        ws.receive()
+        print("Incrementing counter")
+        counter.increment()
 
-    print("Emitting update_counter event")
-    # Broadcast the updated counter to both pages
-    socketio.emit("update_counter", {"number": counter.getCount()})
-
-
-if __name__ == "__main__":
-    socketio.run(app)
+        print("Emitting update_counter event")
+        # Broadcast the updated counter to both pages
+        for client in clients:
+            new_clients = clients.copy()
+            try:
+                client.send(json.dumps({"number": counter.getCount()}))
+            except Exception as e:
+                print(f"Error sending message to client: {e}")
+                new_clients.remove(client)
+        clients = new_clients
