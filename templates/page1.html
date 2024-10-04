@@ -8,20 +8,26 @@
 <body>
     <button id="increment-button">Increment</button>
     <script>
-        const socket = new WebSocket('ws://localhost:5000'); // Adjust the URL as needed
+        const socket = new WebSocket('ws://localhost:5000/increment'); // Use localhost for local testing
 
         socket.onopen = () => {
             console.log('WebSocket connection opened');
         };
 
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log('Received data:', data);
-            // Update the displayed number here (e.g., using an element with ID "number")
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
         };
 
         document.getElementById('increment-button').addEventListener('click', () => {
-            socket.send('increment');
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(0);
+            } else {
+                console.error('WebSocket is not open. ReadyState:', socket.readyState);
+            }
         });
     </script>
 </body>
