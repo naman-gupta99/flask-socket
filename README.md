@@ -20,4 +20,4 @@ pip install -r requirements.txt
 FLASK_ENV=development
 FLASK_APP=server.py flask run
 ```
-4. Open 2 browser windows and go to `http://localhost:5000` and `http://localhost:5000/page2`.
+4. Open 2 browser windows and go to `http://localhost:5000` and `http://localhost:5000/admin`.
