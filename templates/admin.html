@@ -2,13 +2,13 @@
 <html>
 
 <head>
-    <title>Page 2</title>
+    <title>Admin Portal</title>
 </head>
 
 <body>
     <p id="number">{{ counter_value }}</p>
     <script>
-        const socket = new WebSocket('ws://localhost:5000/increment'); // Adjust the URL as needed
+        const socket = new WebSocket('{{ websocket_url }}/increment'); // Adjust the URL as needed
 
         socket.onopen = () => {
             console.log('WebSocket connection opened');

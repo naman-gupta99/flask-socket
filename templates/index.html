@@ -2,13 +2,13 @@
 <html>
 
 <head>
-    <title>Page 1</title>
+    <title>Event Portal</title>
 </head>
 
 <body>
     <button id="increment-button">Increment</button>
     <script>
-        const socket = new WebSocket('ws://localhost:5000/increment'); // Use localhost for local testing
+        const socket = new WebSocket('{{ websocket_url }}/increment'); // Use localhost for local testing
 
         socket.onopen = () => {
             console.log('WebSocket connection opened');
