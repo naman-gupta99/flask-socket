@@ -1,0 +1,1 @@
+web: gunicorn --bind 0.0.0.0:$PORT -k eventlet --workers 1 --thread 100 server:app
